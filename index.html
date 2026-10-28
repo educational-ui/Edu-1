@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>بطولة الكفاءة البدنية الثانية — كلية علوم الرياضة بنين هرم</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Cairo -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        navy: {
+                            DEFAULT: '#0B1325',
+                            dark: '#060B14',
+                            light: '#142038',
+                            surface: '#1A2942'
+                        },
+                        gold: {
+                            DEFAULT: '#F59E0B',
+                            hover: '#D97706',
+                            light: '#FCD34D',
+                            glow: '#FBBF24'
+                        }
+                    },
+                    fontFamily: {
+                        cairo: ['Cairo', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
+        html, body {
+            font-family: 'Cairo', sans-serif;
+            background-color: #060B14;
+            color: #F3F4F6;
+            overflow-x: hidden;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .gold-gradient-text {
+            background: linear-gradient(135deg, #FFF 10%, #FCD34D 40%, #F59E0B 80%, #B45309 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .gold-btn-gradient {
+            background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
+        }
+        .gold-btn-gradient:hover {
+            background: linear-gradient(135deg, #FBBF24 0%, #F59E0B 100%);
+        }
+
+        .glass-card {
+            background: rgba(20, 32, 56, 0.9);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(245, 158, 11, 0.2);
+        }
+
+        .hero-pattern {
+            background-image: radial-gradient(rgba(245, 158, 11, 0.08) 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+
+        /* Custom Scrollbars */
+        ::-webkit-scrollbar {
+            width: 5px;
+            height: 5px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #060B14;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1A2942;
+            border-radius: 4px;
+        }
+
+        @media print {
+            body {
+                background: white !important;
+                color: black !important;
+            }
+            .no-print {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between relative">
+
+    <!-- Toast Notification Container -->
+    <div id="toastContainer" class="fixed bottom-4 left-4 right-4 sm:left-auto sm:right-5 sm:w-80 z-[100] flex flex-col gap-2 pointer-events-none"></div>
+
+    <!-- Navigation Bar -->
+    <header class="sticky top-0 z-30 border-b border-navy-surface bg-navy-dark/95 backdrop-blur-md w-full">
+        <div class="max-w-7xl mx-auto px-3 sm:px-6 h-16 sm:h-20 flex items-center justify-between gap-2">
+            <!-- Brand -->
+            <div class="flex items-center gap-2.5 min-w-0">
+                <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-gradient-to-tr from-gold to-yellow-200 p-0.5 flex-shrink-0 flex items-center justify-center">
+                    <div class="w-full h-full bg-navy-dark rounded-[10px] flex items-center justify-center">
+                        <i class="fa-solid fa-trophy text-gold text-base sm:text-lg"></i>
+                    </div>
+                </div>
+                <div class="min-w-0">
+                    <h1 class="text-xs sm:text-base font-bold text-white truncate">بطولة الكفاءة البدنية</h1>
+                    <p class="text-[10px] sm:text-xs text-gray-400 truncate">كلية علوم الرياضة بنين هرم</p>
+                </div>
+            </div>
+
+            <!-- Nav Actions -->
+            <div class="flex items-center gap-1.5 sm:gap-2.5 flex-shrink-0">
+                <button onclick="scrollToSearch()" class="px-2.5 py-2 rounded-xl bg-navy-surface text-gray-200 text-xs font-semibold border border-gray-700 hover:border-gold/40 flex items-center gap-1.5 transition">
+                    <i class="fa-solid fa-magnifying-glass text-gold text-xs"></i>
+                    <span class="hidden xs:inline sm:inline">استعلام</span>
+                </button>
+                <button onclick="openAdminModal()" class="px-3 py-2 rounded-xl bg-navy-surface hover:bg-gold hover:text-navy-dark text-gold font-bold text-xs border border-gold/30 transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-user-shield text-xs"></i>
+                    <span id="navAdminBtnText" class="max-w-[85px] sm:max-w-none truncate">لوحة المنظمين</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow w-full overflow-hidden">
+        
+        <!-- Hero Section -->
+        <section class="relative py-8 sm:py-14 lg:py-20 hero-pattern w-full">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                    
+                    <!-- Text & CTA -->
+                    <div class="lg:col-span-7 text-center lg:text-right space-y-4 sm:space-y-6">
+                        
+                        <div class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gold/10 border border-gold/30 text-gold text-xs sm:text-sm font-bold max-w-full">
+                            <i class="fa-solid fa-certificate flex-shrink-0"></i>
+                            <span class="truncate">البطولة الرسمية الثانية للكفاءة البدنية 2026</span>
+                        </div>
+
+                        <h2 class="text-2xl sm:text-4xl lg:text-5xl font-black leading-snug sm:leading-tight text-white">
+                            تحدّ قدراتك الرياضية <br/>
+                            <span class="gold-gradient-text">في أرض الأبطال</span>
+                        </h2>
+
+                        <p class="text-gray-300 text-xs sm:text-base max-w-xl leading-relaxed mx-auto lg:mx-0">
+                            تجمع رياضي تنافسي بتنظيم كلية علوم الرياضة بنين هرم — جامعة العاصمة. يهدف لاختبار أعلى مستويات اللياقة، القوة البدنية والسرعة بين طلاب الكلية في 4 منافسات بدنية معتمدة.
+                        </p>
+
+                        <!-- Action Buttons -->
+                        <div class="flex flex-col sm:flex-row justify-center lg:justify-start gap-3 pt-2">
+                            <button onclick="openRegistrationModal()" class="gold-btn-gradient w-full sm:w-auto px-6 py-3.5 rounded-xl text-navy-dark font-black text-sm sm:text-base flex items-center justify-center gap-2 transition active:scale-95">
+                                <i class="fa-solid fa-trophy"></i>
+                                <span>سجّل مجموعتك الآن (4 طلاب)</span>
+                            </button>
+                            <button onclick="scrollToSearch()" class="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-navy-surface hover:bg-navy-light border border-gray-700 text-white font-bold text-sm sm:text-base flex items-center justify-center gap-2 transition">
+                                <i class="fa-solid fa-search text-gold"></i>
+                                <span>بحث بالرقم القومي / الهاتف</span>
+                            </button>
+                        </div>
+
+                        <!-- Highlights Banner -->
+                        <div class="pt-4 grid grid-cols-3 gap-2 border-t border-gray-800/80 max-w-md mx-auto lg:mx-0">
+                            <div class="bg-navy-surface/40 p-2.5 rounded-xl border border-gray-800 text-center">
+                                <p class="text-base sm:text-xl font-black text-gold">4 طلاب</p>
+                                <p class="text-[10px] sm:text-xs text-gray-400">لكل فريق</p>
+                            </div>
+                            <div class="bg-navy-surface/40 p-2.5 rounded-xl border border-gray-800 text-center">
+                                <p class="text-base sm:text-xl font-black text-white">4 مراحل</p>
+                                <p class="text-[10px] sm:text-xs text-gray-400">اختبارات بدنية</p>
+                            </div>
+                            <div class="bg-navy-surface/40 p-2.5 rounded-xl border border-gray-800 text-center">
+                                <p class="text-base sm:text-xl font-black text-gold">جوائز كبرى</p>
+                                <p class="text-[10px] sm:text-xs text-gray-400">للفائزين</p>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Image Card -->
+                    <div class="lg:col-span-5 w-full max-w-md mx-auto">
+                        <div class="relative rounded-2xl overflow-hidden border border-gold/30 shadow-xl bg-navy-surface">
+                            <img src="https://images.unsplash.com/photo-1517838277536-f5f99be501cd?q=80&w=1000&auto=format&fit=crop" 
+                                 alt="الكفاءة البدنية" 
+                                 onerror="this.onerror=null; this.src='https://placehold.co/600x400/0B1325/F59E0B?text=Fitness+2026';"
+                                 class="w-full h-56 sm:h-72 object-cover object-center brightness-90">
+                            
+                            <div class="absolute inset-0 bg-gradient-to-t from-navy-dark via-navy-dark/30 to-transparent"></div>
+                            
+                            <!-- Badges Inside Image (Safe for mobile) -->
+                            <div class="absolute top-3 right-3 glass-card px-3 py-1.5 rounded-full border border-emerald-500/40 flex items-center gap-2">
+                                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                                <span class="text-[11px] font-bold text-white">التسجيل مفتوح لجميع الفرق</span>
+                            </div>
+
+                            <div class="absolute bottom-3 right-3 left-3 p-3 glass-card rounded-xl border border-gold/30">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-lg bg-gold/20 flex-shrink-0 flex items-center justify-center text-gold text-lg">
+                                        <i class="fa-solid fa-location-dot"></i>
+                                    </div>
+                                    <div class="min-w-0">
+                                        <h4 class="font-bold text-white text-xs sm:text-sm truncate">ملاعب كلية علوم الرياضة — هرم</h4>
+                                        <p class="text-[11px] text-gray-300 truncate">تحمّل، قوة، سرعة، ورشاقة حركية</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Search Section -->
+        <section id="searchSection" class="py-8 sm:py-12 bg-navy-light/50 border-y border-navy-surface w-full">
+            <div class="max-w-3xl mx-auto px-4">
+                
+                <div class="text-center space-y-1.5 mb-5">
+                    <span class="text-gold font-bold text-xs flex items-center justify-center gap-1.5">
+                        <i class="fa-solid fa-shield-halved"></i>
+                        <span>الاستعلام الفوري عن حالة التسجيل</span>
+                    </span>
+                    <h2 class="text-lg sm:text-2xl font-extrabold text-white">ابحث عن مجموعتك أو استعلم عن طلبك</h2>
+                    <p class="text-gray-400 text-xs">ابحث بـ: <strong>رقم المجموعة</strong>، <strong>الرقم القومي</strong>، أو <strong>رقم الهاتف</strong></p>
+                </div>
+
+                <!-- Search Box -->
+                <div class="glass-card rounded-2xl p-4 sm:p-6 border border-gold/30 shadow-lg">
+                    <form onsubmit="handleSearch(event)" class="flex flex-col sm:flex-row gap-2.5">
+                        <div class="relative flex-grow">
+                            <i class="fa-solid fa-magnifying-glass absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
+                            <input type="text" id="searchInput" required placeholder="أدخل رقم المجموعة (1) أو القومي أو الهاتف..." 
+                                   class="w-full pl-3 pr-10 py-3 bg-navy-dark border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-gold text-xs sm:text-sm">
+                        </div>
+                        <button type="submit" class="gold-btn-gradient px-6 py-3 rounded-xl font-bold text-navy-dark text-xs sm:text-sm flex items-center justify-center gap-2 transition">
+                            <i class="fa-solid fa-search"></i>
+                            <span>استعلام الآن</span>
+                        </button>
+                    </form>
+
+                    <!-- Results Container -->
+                    <div id="searchResultsArea" class="mt-4 hidden"></div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Fitness Tests Section -->
+        <section class="py-10 sm:py-16 max-w-7xl mx-auto px-4 sm:px-6">
+            <div class="text-center max-w-2xl mx-auto mb-8 space-y-2">
+                <h2 class="text-xl sm:text-3xl font-bold text-white">اختبارات البطولة والشروط الفنية</h2>
+                <p class="text-gray-400 text-xs sm:text-sm">تتكون البطولة من 4 اختبارات كفاءة بدنية رئيسية مع الالتزام التام بالتكنيك الصحيح</p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                
+                <!-- 1. الضغط -->
+                <div class="glass-card p-4 sm:p-5 rounded-2xl border border-gold/25">
+                    <div class="flex items-center gap-3 mb-3">
+                        <div class="w-10 h-10 rounded-xl bg-gold/15 text-gold flex items-center justify-center text-lg font-bold flex-shrink-0">
+                            <i class="fa-solid fa-dumbbell"></i>
+                        </div>
+                        <h3 class="text-base font-bold text-white">1. اختبار الضغط</h3>
+                    </div>
+                    <p class="text-[11px] text-gold font-semibold mb-1.5">شروط التكنيك الصحيح:</p>
+                    <ul class="text-gray-300 text-xs space-y-1.5 list-disc list-inside leading-relaxed">
+                        <li>المفاصل مفرودة بالكامل عند الصعود.</li>
+                        <li>الصدر ملامس للأرض تماماً عند الهبوط.</li>
+                    </ul>
+                </div>
+
+                <!-- 2. العقلة -->
+                <div class="glass-card p-4 sm:p-5 rounded-2xl border border-gold/25">
+                    <div class="flex items-center gap-3 mb-3">
+                        <div class="w-10 h-10 rounded-xl bg-gold/15 text-gold flex items-center justify-center text-lg font-bold flex-shrink-0">
+                            <i class="fa-solid fa-person-arrow-up-from-line"></i>
+                        </div>
+                        <h3 class="text-base font-bold text-white">2. اختبار العقلة</h3>
+                    </div>
+                    <p class="text-[11px] text-gold font-semibold mb-1.5">شروط التكنيك الصحيح:</p>
+                    <ul class="text-gray-300 text-xs space-y-1.5 list-disc list-inside leading-relaxed">
+                        <li>الأرجل مفرودة بالكامل بدون ثني.</li>
+                        <li>بدون أي مرجحة بالجسم.</li>
+                        <li>الطلوع حتى وصول البار إلى الصدر.</li>
+                    </ul>
+                </div>
+
+                <!-- 3. البطن -->
+                <div class="glass-card p-4 sm:p-5 rounded-2xl border border-gold/25">
+                    <div class="flex items-center gap-3 mb-3">
+                        <div class="w-10 h-10 rounded-xl bg-gold/15 text-gold flex items-center justify-center text-lg font-bold flex-shrink-0">
+                            <i class="fa-solid fa-stopwatch"></i>
+                        </div>
+                        <h3 class="text-base font-bold text-white">3. اختبار البطن</h3>
+                    </div>
+                    <p class="text-[11px] text-gold font-semibold mb-1.5">شروط التكنيك الصحيح:</p>
+                    <ul class="text-gray-300 text-xs space-y-1.5 list-disc list-inside leading-relaxed">
+                        <li>النزول الكامل حتى ملامسة الظهر للأرض.</li>
+                        <li>لمس يد الحكم أعلى الكتف عند الطلوع.</li>
+                    </ul>
+                </div>
+
+                <!-- 4. الوثب -->
+                <div class="glass-card p-4 sm:p-5 rounded-2xl border border-gold/25">
+                    <div class="flex items-center gap-3 mb-3">
+                        <div class="w-10 h-10 rounded-xl bg-gold/15 text-gold flex items-center justify-center text-lg font-bold flex-shrink-0">
+                            <i class="fa-solid fa-person-running"></i>
+                        </div>
+                        <h3 class="text-base font-bold text-white">4. الوثب من الثبات</h3>
+                    </div>
+                    <p class="text-[11px] text-gold font-semibold mb-1.5">شروط التكنيك الصحيح:</p>
+                    <ul class="text-gray-300 text-xs space-y-1.5 list-disc list-inside leading-relaxed">
+                        <li>يكون المتسابق حافي القدمين.</li>
+                        <li>أداء مرجحتين بالذراعين فقط ثم القفز.</li>
+                    </ul>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-navy-surface bg-navy-dark py-6 text-center px-4">
+        <p class="text-gray-400 text-xs">جميع الحقوق محفوظة © 2026 — كلية علوم الرياضة بنين هرم (جامعة العاصمة)</p>
+        <p class="text-[11px] text-gray-500 mt-1">البطولة الرسمية الثانية للكفاءة البدنية 2026</p>
+    </footer>
+
+    <!-- ================= 1. Registration Modal ================= -->
+    <div id="registrationModal" class="fixed inset-0 bg-black/85 backdrop-blur-sm z-50 hidden flex items-center justify-center p-2.5 sm:p-4">
+        <div class="glass-card bg-navy-dark border border-gold/40 rounded-2xl w-full max-w-3xl max-h-[92vh] flex flex-col shadow-2xl overflow-hidden">
+            
+            <!-- Modal Sticky Header -->
+            <div class="p-4 sm:p-5 border-b border-navy-surface flex items-center justify-between bg-navy-light/60">
+                <div>
+                    <h3 class="text-base sm:text-xl font-black text-white">تسجيل مجموعة جديدة (4 طلاب)</h3>
+                    <p class="text-[11px] text-gray-400">البطولة الرسمية الثانية للكفاءة البدنية</p>
+                </div>
+                <button type="button" onclick="closeRegistrationModal()" class="w-8 h-8 rounded-lg bg-navy-surface text-gray-300 hover:text-white flex items-center justify-center border border-gray-700">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <!-- Modal Scrollable Body -->
+            <div class="p-4 sm:p-6 overflow-y-auto space-y-5 flex-grow">
+                
+                <div class="flex justify-between items-center bg-gold/10 border border-gold/30 rounded-xl p-2.5">
+                    <span class="text-xs text-gold font-bold">لتجربة التسجيل السريع:</span>
+                    <button type="button" onclick="fillDemoData()" class="text-xs bg-gold text-navy-dark font-bold px-3 py-1 rounded-lg hover:bg-gold-light transition">
+                        <i class="fa-solid fa-wand-magic-sparkling ml-1"></i> تعبئة تلقائية
+                    </button>
+                </div>
+
+                <form id="groupRegisterForm" onsubmit="handleRegistrationSubmit(event)" class="space-y-4">
+                    
+                    <!-- Group Basic Info -->
+                    <div class="bg-navy-surface/40 p-3.5 rounded-xl border border-gray-800 grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <div>
+                            <label class="block text-xs font-bold text-gray-300 mb-1">اسم المجموعة *</label>
+                            <input type="text" id="groupName" required placeholder="مثال: مجموعة الفرسان" class="w-full bg-navy-dark border border-gray-700 rounded-lg px-3 py-2 text-white text-xs focus:border-gold focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-gray-300 mb-1">الفرقة الدراسية *</label>
+                            <select id="groupGrade" required class="w-full bg-navy-dark border border-gray-700 rounded-lg px-3 py-2 text-white text-xs focus:border-gold focus:outline-none">
+                                <option value="">اختر الفرقة</option>
+                                <option value="الفرقة الأولى">الفرقة الأولى</option>
+                                <option value="الفرقة الثانية">الفرقة الثانية</option>
+                                <option value="الفرقة الثالثة">الفرقة الثالثة</option>
+                                <option value="الفرقة الرابعة">الفرقة الرابعة</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-gray-300 mb-1">القسم / الشعبة (اختياري)</label>
+                            <input type="text" id="groupSpecialization" placeholder="تدريب / تدريس / إدارة" class="w-full bg-navy-dark border border-gray-700 rounded-lg px-3 py-2 text-white text-xs focus:border-gold focus:outline-none">
+                        </div>
+                    </div>
+
+                    <!-- Students Inputs -->
+                    <div class="space-y-3">
+                        <!-- Student 1 -->
+                        <div class="p-3.5 rounded-xl bg-navy-surface/30 border border-gold/40 space-y-2.5">
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs font-bold text-gold flex items-center gap-1.5">
+                                    <i class="fa-solid fa-crown"></i> الطالب الأول (قائد المجموعة)
+                                </span>
+                                <span class="bg-gold text-navy-dark text-[10px] font-black px-2 py-0.5 rounded">القائد</span>
+                            </div>
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                                <input type="text" id="s1_name" required placeholder="الاسم الرباعي *" class="w-full bg-navy-dark border border-gray-700 rounded-lg px-3 py-2 text-white text-xs focus:border-gold focus:outline-none">
+                                <input type="text" id="s1_national_id" required pattern="[0-9]{14}" maxlength="14" placeholder="الرقم القومي (14 رقم) *" class="w-full bg-navy-dark border border-gray-700 rounded-lg px-3 py-2 text-white text-xs focus:border-gold focus:outline-none">
+                                <input type="tel" id="s1_phone" required pattern="01[0-9]{9}" maxlength="11" placeholder="رقم الموبايل (01xxxxxxxxx) *" class="w-full bg-navy-dark border border-gray-700 rounded-lg px-3 py-2 text-white text-xs focus:border-gold focus:outline-none">
+                            </div>
+                        </div>
+
+                        <!-- Student 2 -->
+                        <div class="p-3.5 rounded-xl bg-navy-surface/20 border border-gray-800 space-y-2.5">
+                            <span class="text-xs font-bold text-gray-200 block"><i class="fa-solid fa-user text-gold ml-1"></i> الطالب الثاني</span>
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                                <input type="text" id="s2_name" required placeholder="الاسم الرباعي *" class="w-full bg-navy-dark border border-gray-700 rounded-lg px-3 py-2 text-white text-xs focus:border-gold focus:outline-none">
+                                <input type="text" id="s2_national_id" required pattern="[0-9]{14}" maxlength="14" placeholder="الرقم القومي (14 رقم) *" class="w-full bg-navy-dark border border-gray-700 rounded-lg px-3 py-2 text-white text-xs focus:border-gold focus:outline-none">
+                                <input type="tel" id="s2_phone" required pattern="01[0-9]{9}" maxlength="11" placeholder="رقم الموبايل *" class="w-full bg-navy-dark border border-gray-700 rounded-lg px-3 py-2 text-white text-xs focus:border-gold focus:outline-none">
+                            </div>
+                        </div>
+
+                        <!-- Student 3 -->
+                        <div class="p-3.5 rounded-xl bg-navy-surface/20 border border-gray-800 space-y-2.5">
+                            <span class="text-xs font-bold text-gray-200 block"><i class="fa-solid fa-user text-gold ml-1"></i> الطالب الثالث</span>
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                                <input type="text" id="s3_name" required placeholder="الاسم الرباعي *" class="w-full bg-navy-dark border border-gray-700 rounded-lg px-3 py-2 text-white text-xs focus:border-gold focus:outline-none">
+                                <input type="text" id="s3_national_id" required pattern="[0-9]{14}" maxlength="14" placeholder="الرقم القومي (14 رقم) *" class="w-full bg-navy-dark border border-gray-700 rounded-lg px-3 py-2 text-white text-xs focus:border-gold focus:outline-none">
+                                <input type="tel" id="s3_phone" required pattern="01[0-9]{9}" maxlength="11" placeholder="رقم الموبايل *" class="w-full bg-navy-dark border border-gray-700 rounded-lg px-3 py-2 text-white text-xs focus:border-gold focus:outline-none">
+                            </div>
+                        </div>
+
+                        <!-- Student 4 -->
+                        <div class="p-3.5 rounded-xl bg-navy-surface/20 border border-gray-800 space-y-2.5">
+                            <span class="text-xs font-bold text-gray-200 block"><i class="fa-solid fa-user text-gold ml-1"></i> الطالب الرابع</span>
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                                <input type="text" id="s4_name" required placeholder="الاسم الرباعي *" class="w-full bg-navy-dark border border-gray-700 rounded-lg px-3 py-2 text-white text-xs focus:border-gold focus:outline-none">
+                                <input type="text" id="s4_national_id" required pattern="[0-9]{14}" maxlength="14" placeholder="الرقم القومي (14 رقم) *" class="w-full bg-navy-dark border border-gray-700 rounded-lg px-3 py-2 text-white text-xs focus:border-gold focus:outline-none">
+                                <input type="tel" id="s4_phone" required pattern="01[0-9]{9}" maxlength="11" placeholder="رقم الموبايل *" class="w-full bg-navy-dark border border-gray-700 rounded-lg px-3 py-2 text-white text-xs focus:border-gold focus:outline-none">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Submit Footer -->
+                    <div class="pt-3 border-t border-navy-surface flex flex-col-reverse sm:flex-row justify-end gap-2">
+                        <button type="button" onclick="closeRegistrationModal()" class="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-navy-surface text-gray-300 font-bold text-xs">إلغاء</button>
+                        <button type="submit" class="w-full sm:w-auto gold-btn-gradient px-6 py-2.5 rounded-xl text-navy-dark font-black text-xs sm:text-sm flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-paper-plane"></i>
+                            <span>تأكيد تسجيل المجموعة</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= 2. Admin Login Modal (Fixed & Centered) ================= -->
+    <div id="adminLoginModal" class="fixed inset-0 bg-black/85 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="glass-card bg-navy-dark border border-gold/40 rounded-2xl w-full max-w-sm p-5 relative shadow-2xl">
+            <button type="button" onclick="closeAdminLoginModal()" class="absolute left-3.5 top-3.5 w-8 h-8 rounded-lg bg-navy-surface text-gray-400 hover:text-white flex items-center justify-center">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            
+            <div class="text-center space-y-1.5 mb-5 mt-2">
+                <div class="w-12 h-12 rounded-xl bg-gold/15 text-gold flex items-center justify-center text-xl mx-auto">
+                    <i class="fa-solid fa-user-shield"></i>
+                </div>
+                <h3 class="text-base sm:text-lg font-bold text-white">تسجيل دخول المنظمين</h3>
+                <p class="text-[11px] text-gray-400">اختر الحساب وأدخل كلمة المرور</p>
+            </div>
+
+            <form onsubmit="handleAdminLogin(event)" class="space-y-3.5">
+                <div>
+                    <label class="block text-xs text-gray-300 mb-1">اسم المنظم</label>
+                    <select id="adminAccountSelect" required class="w-full bg-navy-surface border border-gray-700 rounded-xl px-3 py-2.5 text-white text-xs focus:border-gold focus:outline-none">
+                        <option value="عبد الرحمن الجبالي">عبد الرحمن الجبالي — رئيس الاتحاد</option>
+                        <option value="مهدي">مهدي — نائب رئيس الاتحاد</option>
+                        <option value="سيف نور الدين">سيف نور الدين — أدمن البطولة الرئيسي</option>
+                        <option value="معاذ وليد">معاذ وليد — مسؤول التنظيم</option>
+                        <option value="احمد ماجد">احمد ماجد — مسؤول التنظيم</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs text-gray-300 mb-1">كلمة المرور *</label>
+                    <input type="password" id="adminPassword" required placeholder="••••••" class="w-full bg-navy-surface border border-gray-700 rounded-xl px-3 py-2.5 text-white text-sm focus:border-gold focus:outline-none text-center" dir="ltr">
+                </div>
+                <button type="submit" class="w-full gold-btn-gradient py-3 rounded-xl font-black text-navy-dark text-xs sm:text-sm transition">
+                    دخول لوحة التحكم
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ================= 3. Admin Dashboard Modal ================= -->
+    <div id="adminDashboardModal" class="fixed inset-0 bg-black/90 backdrop-blur-sm z-50 hidden flex items-center justify-center p-2 sm:p-4">
+        <div class="glass-card bg-navy-dark border border-gold/40 rounded-2xl w-full max-w-5xl max-h-[94vh] flex flex-col shadow-2xl overflow-hidden">
+            
+            <!-- Dashboard Sticky Header -->
+            <div class="p-3.5 sm:p-5 border-b border-navy-surface flex flex-wrap items-center justify-between gap-2 bg-navy-light/60">
+                <div>
+                    <div class="flex items-center gap-1.5 text-gold font-bold text-[11px]">
+                        <i class="fa-solid fa-user-shield"></i>
+                        <span id="currentAdminName">لوحة المنظمين</span>
+                    </div>
+                    <h3 class="text-sm sm:text-lg font-black text-white">إدارة المجموعات المُسجلة</h3>
+                </div>
+                
+                <div class="flex items-center gap-1.5">
+                    <button onclick="exportData()" class="px-2.5 py-1.5 rounded-lg bg-navy-surface text-gray-200 text-[11px] font-bold border border-gray-700 flex items-center gap-1">
+                        <i class="fa-solid fa-download text-emerald-400"></i>
+                        <span class="hidden sm:inline">تصدير</span>
+                    </button>
+                    <button onclick="window.print()" class="px-2.5 py-1.5 rounded-lg bg-navy-surface text-gray-200 text-[11px] font-bold border border-gray-700 flex items-center gap-1">
+                        <i class="fa-solid fa-print text-gold"></i>
+                        <span class="hidden sm:inline">طباعة</span>
+                    </button>
+                    <button onclick="handleAdminLogout()" class="px-2.5 py-1.5 rounded-lg bg-rose-500/20 text-rose-400 text-[11px] font-bold border border-rose-500/30">
+                        خروج
+                    </button>
+                    <button onclick="closeAdminDashboardModal()" class="w-8 h-8 rounded-lg bg-navy-surface text-gray-400 hover:text-white flex items-center justify-center border border-gray-700">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Dashboard Scrollable Body -->
+            <div class="p-3.5 sm:p-5 overflow-y-auto space-y-4 flex-grow">
+                <!-- Stats -->
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                    <div class="bg-navy-surface/60 p-3 rounded-xl border border-gray-800">
+                        <p class="text-[10px] text-gray-400">إجمالي المجموعات</p>
+                        <p id="statTotalGroups" class="text-lg sm:text-xl font-black text-white">0</p>
+                    </div>
+                    <div class="bg-navy-surface/60 p-3 rounded-xl border border-gray-800">
+                        <p class="text-[10px] text-gray-400">إجمالي الطلاب</p>
+                        <p id="statTotalStudents" class="text-lg sm:text-xl font-black text-gold">0</p>
+                    </div>
+                    <div class="bg-navy-surface/60 p-3 rounded-xl border border-gray-800">
+                        <p class="text-[10px] text-gray-400">مقبول</p>
+                        <p id="statApprovedGroups" class="text-lg sm:text-xl font-black text-emerald-400">0</p>
+                    </div>
+                    <div class="bg-navy-surface/60 p-3 rounded-xl border border-gray-800">
+                        <p class="text-[10px] text-gray-400">قيد المراجعة</p>
+                        <p id="statPendingGroups" class="text-lg sm:text-xl font-black text-amber-400">0</p>
+                    </div>
+                </div>
+
+                <!-- Filters -->
+                <div class="flex flex-col sm:flex-row gap-2">
+                    <input type="text" id="adminSearchInput" oninput="renderAdminTable()" placeholder="ابحث باسم المجموعة أو الطالب أو الرقم القومي..." class="flex-grow bg-navy-dark border border-gray-700 rounded-xl px-3 py-2 text-white text-xs focus:border-gold focus:outline-none">
+                    <select id="adminGradeFilter" onchange="renderAdminTable()" class="bg-navy-dark border border-gray-700 rounded-xl px-3 py-2 text-white text-xs focus:border-gold focus:outline-none">
+                        <option value="ALL">جميع الفرق الدراسية</option>
+                        <option value="الفرقة الأولى">الفرقة الأولى</option>
+                        <option value="الفرقة الثانية">الفرقة الثانية</option>
+                        <option value="الفرقة الثالثة">الفرقة الثالثة</option>
+                        <option value="الفرقة الرابعة">الفرقة الرابعة</option>
+                    </select>
+                </div>
+
+                <!-- Groups List -->
+                <div id="adminTeamsList" class="space-y-3"></div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- JavaScript Logic -->
+    <script>
+        const STORAGE_KEY = 'fitness_championship_groups_2026_v2';
+        const ADMIN_SESSION_KEY = 'fitness_championship_admin_session_v2';
+        let currentAdminUser = sessionStorage.getItem(ADMIN_SESSION_KEY) || null;
+
+        const initialMockGroups = [
+            {
+                id: "GRP-101",
+                numId: 1,
+                name: "مجموعة الأبطال",
+                grade: "الفرقة الأولى",
+                specialization: "تدريب رياضي",
+                status: "مقبول",
+                registeredAt: "2026-10-25",
+                students: [
+                    { name: "احمد محمد علي حسن", nationalId: "30201010101234", phone: "01012345678", role: "القائد" },
+                    { name: "محمود خالد سعيد", nationalId: "30202020202345", phone: "01123456789", role: "عضو" },
+                    { name: "عمر فاروق الشريف", nationalId: "30203030303456", phone: "01234567890", role: "عضو" },
+                    { name: "يوسف ابراهيم السيد", nationalId: "30204040404567", phone: "01545678901", role: "عضو" }
+                ]
+            }
+        ];
+
+        function getGroups() {
+            const stored = localStorage.getItem(STORAGE_KEY);
+            if (!stored) {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(initialMockGroups));
+                return initialMockGroups;
+            }
+            try {
+                return JSON.parse(stored);
+            } catch (e) {
+                return initialMockGroups;
+            }
+        }
+
+        function saveGroups(groups) {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(groups));
+        }
+
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `p-3 rounded-xl text-xs font-bold text-white shadow-xl flex items-center gap-2 transition duration-300 pointer-events-auto ${
+                type === 'success' ? 'bg-emerald-600 border border-emerald-400' : 'bg-rose-600 border border-rose-400'
+            }`;
+            const icon = type === 'success' ? 'fa-circle-check' : 'fa-triangle-exclamation';
+            toast.innerHTML = `<i class="fa-solid ${icon} text-sm flex-shrink-0"></i><span>${message}</span>`;
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.classList.add('opacity-0');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        function scrollToSearch() {
+            const el = document.getElementById('searchSection');
+            if (el) {
+                el.scrollIntoView({ behavior: 'smooth' });
+                setTimeout(() => document.getElementById('searchInput').focus(), 400);
+            }
+        }
+
+        function openRegistrationModal() {
+            document.getElementById('registrationModal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeRegistrationModal() {
+            document.getElementById('registrationModal').classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+
+        function fillDemoData() {
+            const rand = Math.floor(1000 + Math.random() * 9000);
+            document.getElementById('groupName').value = `مجموعة النسور ${rand.toString().slice(0,2)}`;
+            document.getElementById('groupGrade').value = 'الفرقة الثانية';
+            document.getElementById('groupSpecialization').value = 'تدريب رياضي';
+
+            const names = ["عبد الرحمن محمد زكي", "حسام الدين عصام", "بلال خالد النجار", "زياد وائل بدر"];
+            for (let i = 1; i <= 4; i++) {
+                document.getElementById(`s${i}_name`).value = names[i - 1];
+                document.getElementById(`s${i}_national_id`).value = `3040${i}05010${rand}`;
+                document.getElementById(`s${i}_phone`).value = `010${rand}${i}123`.slice(0, 11);
+            }
+            showToast('تمت تعبئة بيانات تجريبية بنجاح');
+        }
+
+        function handleRegistrationSubmit(event) {
+            event.preventDefault();
+            const groups = getGroups();
+            const nextNumId = groups.length > 0 ? Math.max(...groups.map(g => g.numId || 0)) + 1 : 1;
+
+            const newGroup = {
+                id: `GRP-${100 + nextNumId}`,
+                numId: nextNumId,
+                name: document.getElementById('groupName').value.trim() || `مجموعة ${nextNumId}`,
+                grade: document.getElementById('groupGrade').value,
+                specialization: document.getElementById('groupSpecialization').value.trim() || 'عام',
+                status: 'قيد المراجعة',
+                registeredAt: new Date().toLocaleDateString('ar-EG'),
+                students: [
+                    { name: document.getElementById('s1_name').value.trim(), nationalId: document.getElementById('s1_national_id').value.trim(), phone: document.getElementById('s1_phone').value.trim(), role: 'القائد' },
+                    { name: document.getElementById('s2_name').value.trim(), nationalId: document.getElementById('s2_national_id').value.trim(), phone: document.getElementById('s2_phone').value.trim(), role: 'عضو' },
+                    { name: document.getElementById('s3_name').value.trim(), nationalId: document.getElementById('s3_national_id').value.trim(), phone: document.getElementById('s3_phone').value.trim(), role: 'عضو' },
+                    { name: document.getElementById('s4_name').value.trim(), nationalId: document.getElementById('s4_national_id').value.trim(), phone: document.getElementById('s4_phone').value.trim(), role: 'عضو' }
+                ]
+            };
+
+            groups.push(newGroup);
+            saveGroups(groups);
+            closeRegistrationModal();
+            document.getElementById('groupRegisterForm').reset();
+            showToast(`تم التسجيل! رقم مجموعتك هو (${nextNumId})`);
+
+            document.getElementById('searchInput').value = nextNumId;
+            scrollToSearch();
+            handleSearch(new Event('submit'));
+        }
+
+        function handleSearch(event) {
+            if (event) event.preventDefault();
+            const query = document.getElementById('searchInput').value.trim().toLowerCase();
+            const resultsArea = document.getElementById('searchResultsArea');
+            resultsArea.classList.remove('hidden');
+
+            if (!query) return;
+
+            const groups = getGroups();
+            const matched = groups.filter(g => {
+                const matchId = g.numId?.toString() === query || g.id?.toLowerCase().includes(query);
+                const matchName = g.name?.toLowerCase().includes(query);
+                const matchStudent = g.students.some(s => 
+                    s.name?.toLowerCase().includes(query) || 
+                    s.nationalId?.includes(query) || 
+                    s.phone?.includes(query)
+                );
+                return matchId || matchName || matchStudent;
+            });
+
+            if (matched.length === 0) {
+                resultsArea.innerHTML = `
+                    <div class="p-4 bg-navy-dark/90 rounded-xl text-center border border-gray-800">
+                        <p class="text-gray-300 font-bold text-xs">لا توجد نتائج مطابقة لبحثك</p>
+                    </div>
+                `;
+                return;
+            }
+
+            resultsArea.innerHTML = matched.map(g => `
+                <div class="bg-navy-dark/95 border border-gold/30 rounded-xl p-3.5 space-y-3">
+                    <div class="flex justify-between items-start border-b border-gray-800 pb-2.5 gap-2">
+                        <div>
+                            <span class="text-[10px] font-bold text-gold bg-gold/10 px-2 py-0.5 rounded border border-gold/20">
+                                مجموعة #${g.numId}
+                            </span>
+                            <h4 class="text-sm sm:text-base font-bold text-white mt-1">${g.name}</h4>
+                            <p class="text-[11px] text-gray-400">${g.grade} — ${g.specialization}</p>
+                        </div>
+                        <span class="px-2.5 py-1 rounded-full text-[11px] font-bold flex-shrink-0 ${
+                            g.status === 'مقبول' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' :
+                            g.status === 'مرفوض' ? 'bg-rose-500/20 text-rose-400 border border-rose-500/30' :
+                            'bg-amber-500/20 text-amber-400 border border-amber-500/30'
+                        }">${g.status}</span>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                        ${g.students.map((st, idx) => `
+                            <div class="p-2 bg-navy-surface/50 rounded-lg border border-gray-800 flex items-center justify-between gap-2">
+                                <div class="min-w-0">
+                                    <p class="text-xs font-bold text-white truncate">${idx + 1}. ${st.name}</p>
+                                    <p class="text-[10px] text-gray-400">قومي: ${st.nationalId}</p>
+                                </div>
+                                <span class="text-[10px] bg-navy-dark px-2 py-0.5 rounded text-gold font-bold flex-shrink-0">${st.role}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `).join('<div class="my-2"></div>');
+        }
+
+        function openAdminModal() {
+            if (currentAdminUser) {
+                openAdminDashboardModal();
+            } else {
+                document.getElementById('adminLoginModal').classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function closeAdminLoginModal() {
+            document.getElementById('adminLoginModal').classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+
+        function handleAdminLogin(event) {
+            event.preventDefault();
+            const account = document.getElementById('adminAccountSelect').value;
+            const pass = document.getElementById('adminPassword').value;
+
+            if (pass === '102030') {
+                currentAdminUser = account;
+                sessionStorage.setItem(ADMIN_SESSION_KEY, account);
+                document.getElementById('adminPassword').value = '';
+                closeAdminLoginModal();
+                showToast(`مرحباً بك: ${account}`);
+                updateAdminNavUI();
+                openAdminDashboardModal();
+            } else {
+                showToast('كلمة المرور غير صحيحة!', 'error');
+            }
+        }
+
+        function handleAdminLogout() {
+            currentAdminUser = null;
+            sessionStorage.removeItem(ADMIN_SESSION_KEY);
+            updateAdminNavUI();
+            closeAdminDashboardModal();
+            showToast('تم تسجيل الخروج');
+        }
+
+        function updateAdminNavUI() {
+            const btnText = document.getElementById('navAdminBtnText');
+            if (btnText) {
+                btnText.innerText = currentAdminUser ? currentAdminUser : 'لوحة المنظمين';
+            }
+        }
+
+        function openAdminDashboardModal() {
+            document.getElementById('currentAdminName').innerText = `المنظم: ${currentAdminUser || 'الإدارة'}`;
+            document.getElementById('adminDashboardModal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+            renderAdminTable();
+        }
+
+        function closeAdminDashboardModal() {
+            document.getElementById('adminDashboardModal').classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+
+        function renderAdminTable() {
+            const groups = getGroups();
+            const query = document.getElementById('adminSearchInput')?.value.trim().toLowerCase() || '';
+            const gradeFilter = document.getElementById('adminGradeFilter')?.value || 'ALL';
+
+            document.getElementById('statTotalGroups').innerText = groups.length;
+            document.getElementById('statTotalStudents').innerText = groups.length * 4;
+            document.getElementById('statApprovedGroups').innerText = groups.filter(g => g.status === 'مقبول').length;
+            document.getElementById('statPendingGroups').innerText = groups.filter(g => g.status === 'قيد المراجعة').length;
+
+            const filtered = groups.filter(g => {
+                const matchGrade = gradeFilter === 'ALL' || g.grade === gradeFilter;
+                const matchSearch = !query || 
+                    g.name?.toLowerCase().includes(query) || 
+                    g.numId?.toString().includes(query) ||
+                    g.students.some(s => s.name?.toLowerCase().includes(query) || s.nationalId?.includes(query));
+                return matchGrade && matchSearch;
+            });
+
+            const container = document.getElementById('adminTeamsList');
+            if (filtered.length === 0) {
+                container.innerHTML = `<div class="text-center py-6 text-gray-400 bg-navy-surface/30 rounded-xl text-xs">لا توجد مجموعات مطابقة.</div>`;
+                return;
+            }
+
+            container.innerHTML = filtered.map(g => `
+                <div class="bg-navy-surface/40 border border-gray-800 rounded-xl p-3 space-y-2.5">
+                    <div class="flex flex-wrap justify-between items-center gap-2">
+                        <div class="flex items-center gap-2 min-w-0">
+                            <span class="w-7 h-7 rounded-lg bg-gold/15 text-gold font-bold flex items-center justify-center text-xs flex-shrink-0">
+                                #${g.numId}
+                            </span>
+                            <div class="min-w-0">
+                                <h4 class="font-bold text-white text-xs sm:text-sm truncate">${g.name}</h4>
+                                <p class="text-[10px] text-gray-400">${g.grade} — ${g.specialization}</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center gap-1.5">
+                            <select onchange="changeStatus('${g.id}', this.value)" class="bg-navy-dark border border-gray-700 rounded-lg text-[11px] text-white px-2 py-1 focus:border-gold focus:outline-none">
+                                <option value="قيد المراجعة" ${g.status === 'قيد المراجعة' ? 'selected' : ''}>قيد المراجعة</option>
+                                <option value="مقبول" ${g.status === 'مقبول' ? 'selected' : ''}>مقبول</option>
+                                <option value="مرفوض" ${g.status === 'مرفوض' ? 'selected' : ''}>مرفوض</option>
+                            </select>
+                            <button onclick="confirmDeleteGroup('${g.id}')" class="p-1.5 text-rose-400 hover:bg-rose-500/20 rounded-lg">
+                                <i class="fa-solid fa-trash text-xs"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 pt-2 border-t border-gray-800/60">
+                        ${g.students.map((st, i) => `
+                            <div class="text-[11px] bg-navy-dark/70 p-2 rounded-lg border border-gray-800/80 min-w-0">
+                                <p class="font-bold text-gray-200 truncate">${i+1}. ${st.name}</p>
+                                <p class="text-gray-400 text-[10px]">قومي: ${st.nationalId}</p>
+                                <p class="text-gray-400 text-[10px]">هاتف: ${st.phone}</p>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function changeStatus(id, newStatus) {
+            const groups = getGroups();
+            const group = groups.find(g => g.id === id);
+            if (group) {
+                group.status = newStatus;
+                saveGroups(groups);
+                renderAdminTable();
+                showToast(`تم تحديث الحالة: ${newStatus}`);
+            }
+        }
+
+        function confirmDeleteGroup(id) {
+            if (!confirm('هل تريد حذف هذه المجموعة نهائياً؟')) return;
+            const groups = getGroups().filter(g => g.id !== id);
+            saveGroups(groups);
+            renderAdminTable();
+            showToast('تم حذف المجموعة', 'error');
+        }
+
+        function exportData() {
+            const groups = getGroups();
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(groups, null, 2));
+            const dlAnchorElem = document.createElement('a');
+            dlAnchorElem.setAttribute("href", dataStr);
+            dlAnchorElem.setAttribute("download", `teams_2026.json`);
+            dlAnchorElem.click();
+        }
+
+        window.onload = function() {
+            getGroups();
+            updateAdminNavUI();
+        };
+    </script>
+</body>
+</html>
